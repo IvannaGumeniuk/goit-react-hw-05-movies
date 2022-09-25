@@ -1,0 +1,19 @@
+.header {
+    padding: 8px 0;
+    border-bottom: 1px solid black;
+}
+
+.links a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: black;
+} 
+
+.links a:hover {
+    color: orangered;
+}
+
+.active {
+    color: orangered;
+    border-bottom: 1px solid orangered;
+}
