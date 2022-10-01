@@ -1,68 +1,46 @@
-// export const Home = () => {
-//   return (
-//     <main>
-//       <h1>Trending today</h1>
-//       <img src="https://via.placeholder.com/960x240" alt="" />
-//       <p>
-//         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto,
-//         laboriosam placeat incidunt rem illum animi nemo quibusdam quia
-//         voluptatum voluptate.
-//         https://api.themoviedb.org/3/trending/movie/day?api_key=8b583155d58a646685ec9258b19767f3
-//         https://api.themoviedb.org/3/movie/550?api_key=8b583155d58a646685ec9258b19767f3
-//       </p>
-//     </main>
-//   );
-// };
-
 import { useEffect, useState } from "react";
+import { fetchTrending } from "../../services/moviesApi";
+import Loader from "../../components/Loader/Loader";
+import Button from "components/Button/Button";
+import MoviesGallery from "../../components/MoviesGallery/MoviesGallery";
+import styles from "./Home.module.css";
 
 export default function Home() {
-  const [error, setError] = useState(null);
-  const [isLoader, setIsLoader] = useState(false);
-  const [results, setResults] = useState([]);
+    const [moviesList, setMoviesList] = useState([]);
+    const [countPage, setCountPage] = useState(1);
+    const [showLoadMore, setShowLoadMore] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetch("https://api.themoviedb.org/3/trending/movie/day?api_key=8b583155d58a646685ec9258b19767f3")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setIsLoader(true);
-          setResults(result);
-          console.log(result);
-        },
-        (error) => {
-          setIsLoader(true);
-          setError(error);
-        }
-    )
-  }, [])
+    useEffect(() => {
+      setShowLoadMore(false);
+      setLoading(true);
+      fetchTrending(countPage).then(date => {
+        setMoviesList(prev => {
+          const filterRes = date.results.filter(({ id }) => {
+            for (const movie of prev) {
+              if (id === movie.id) {
+                return false;
+              }
+            }
+            return true;
+          });
+          return [...prev, ...filterRes];
+        });
+        setLoading(false);
+        setShowLoadMore(true);
+      });
+    }, [countPage] );
   
-  if (error) {
-    return <div>Помилка: {error.message} </div>;
-  } else if (!isLoader) {
-    return <div>Завантаження ... </div>;
-  } else {
-    console.log("arr:", results);
+  const onloadeMore = () => {
+    setCountPage(prev => prev + 1);
+  };
+  
     return (
-      <ul>
-        {results.map((movie) => (
-          <li key={movie.id}>
-            {movie.title}
-          </li>
-        ))}
-      </ul>
-        
+      <div className={styles.container}>
+        <h1 className={styles.title}>Top 20 Trending Movies Today</h1>
+        <MoviesGallery moviesList={moviesList} />
+        {loading && <Loader />}
+        {showLoadMore && <Button onClick={onloadeMore} title="Load more" />}
+      </div>
     );
-}
-}
-
-// function renderUserList(users) {
-//   const markup = users.map((user) => {
-//       return `<li>
-//           <p><b>Name</b>: ${user.name}</p>
-//           <p><b>Email</b>: ${user.email}</p>
-//           <p><b>Company</b>: ${user.company.name}</p>
-//         </li>`;
-//     })
-//     .join("");
-  // innerHTML = markup;
+  }

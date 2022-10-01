@@ -1,19 +1,28 @@
-.header {
-    padding: 8px 0;
-    border-bottom: 1px solid black;
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    background: #FFFFFF url(https://phonoteka.org/uploads/posts/2021-04/thumbs/1618475908_5-phonoteka_org-p-fon-dlya-shapki-saita-6.jpg) 100% 0 repeat;
+}
+.nav {
+    padding-left: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-.links a {
-    margin-left: 10px;
+.nav a {
+    display: inline-block;
     text-decoration: none;
-    color: black;
-} 
-
-.links a:hover {
-    color: orangered;
+    font-weight: 700;
+    font-size: 24px;
+    padding: 12px;
 }
 
-.active {
-    color: orangered;
-    border-bottom: 1px solid orangered;
+.inactive {
+    color: #707070;
+    transition: color 0.5s, text-shadow 0.5s;
+}
+
+.active,
+.inactive:hover {
+    color: #FFC229;
 }
