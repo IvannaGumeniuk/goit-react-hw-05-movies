@@ -23,7 +23,7 @@ const MovieDetails = () => {
 //        }
 //    };
     const location=useLocation()
-    const clickGoBack = location.state?.from ?? "/movies";
+    const clickGoBack = location.state?.from ?? "/";
     
     
     useEffect(() => {
@@ -37,7 +37,7 @@ const MovieDetails = () => {
         <div>
             
             {/* <Button onClick={clickGoBack} title="Go back" /> */}
-             <Link to={clickGoBack}>Go Back</Link>
+            <Link to={clickGoBack}>Go Back</Link>
             {movie && (
                 <div className={styles.details_info}>
                     <img className={styles.image} src={movie.poster_path ? URL_IMG + movie.poster_path : nophoto} width="250px" alt='movie poster'></img>
@@ -50,10 +50,10 @@ const MovieDetails = () => {
                                 {movie.genres.map(genr => genr.name).join(' / ')}</p>
                         </div>
 
-                        <nav>
-                            <NavLink to="cast" className={({ isActive }) =>
+                        <nav state={{ from: location.state?.from }}>
+                            <NavLink to="cast" state={{ from: location.state?.from }} className={({ isActive }) =>
                                 isActive ? `${styles.active}` : `${styles.inactive}`}>Cast</NavLink>
-                            <NavLink to="reviews" className={({ isActive }) =>
+                            <NavLink to="reviews" state={{ from: location.state?.from }} className={({ isActive }) =>
                                 isActive ? `${styles.active}` : `${styles.inactive}`}>Reviews</NavLink>
                         </nav>
                     </div>
