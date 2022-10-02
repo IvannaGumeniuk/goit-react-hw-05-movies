@@ -1,7 +1,9 @@
 import { Suspense } from 'react';
 import { useEffect, useState } from "react";
-import { useParams, Outlet, NavLink } from "react-router-dom";
+import { useLocation, useParams, Outlet, Link, NavLink } from "react-router-dom";
 import { URL_IMG, fetchMovieDetailsById } from "../../services/moviesApi";
+// import { useNavigate } from 'react-router-dom';
+// import Button from 'components/Button/Button';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'pages/NotFound/NotFound';
 import nophoto from "../../imeges/nophoto.png";
@@ -12,6 +14,18 @@ const MovieDetails = () => {
     const [movie, setMovie] = useState(null);
     const [error, setError] = useState(null);
 
+//     const navigate = useNavigate();
+//    const clickGoBack = () => {
+//       if (window.history.state && window.history.state.idx > 0) {
+//          navigate(-1);
+//       } else{
+//          navigate('/', { replace: true });
+//        }
+//    };
+    const location=useLocation()
+    const clickGoBack = location.state?.from ?? "/movies";
+    
+    
     useEffect(() => {
         fetchMovieDetailsById(movieId)
         .then(setMovie)
@@ -21,6 +35,9 @@ const MovieDetails = () => {
 
     return (
         <div>
+            
+            {/* <Button onClick={clickGoBack} title="Go back" /> */}
+             <Link to={clickGoBack}>Go Back</Link>
             {movie && (
                 <div className={styles.details_info}>
                     <img className={styles.image} src={movie.poster_path ? URL_IMG + movie.poster_path : nophoto} width="250px" alt='movie poster'></img>
